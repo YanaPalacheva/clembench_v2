@@ -113,7 +113,7 @@ def score(game_name: str, experiment_name: str = None, results_dir: str = None):
 
     if experiment_name:
         logger.info("Only scoring experiment: %s", experiment_name)
-    game_spec = clemgame.select_game(game_name)
+    game_spec = clemgame.select_game(game_name)[0]  # hotfix to get results
     try:
         game = clemgame.load_game(game_spec, do_setup=False)
         if experiment_name:
@@ -139,7 +139,7 @@ def transcripts(game_name: str, experiment_name: str = None, results_dir: str = 
     stdout_logger.info(f"Transcribing game {game_name}")
     if experiment_name:
         logger.info("Only transcribing experiment: %s", experiment_name)
-    game_spec = clemgame.select_game(game_name)
+    game_spec = clemgame.select_game(game_name)[0]  # hotfix to get results
     try:
         game = clemgame.load_game(game_spec, do_setup=False)
         if experiment_name:
