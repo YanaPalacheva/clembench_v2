@@ -1,0 +1,53 @@
+[
+  {
+      "model_name": "llama-3.1-8b-instant-Groq",
+      "model_id": "llama-3.1-8b-instant",
+      "backend": "openai_compatible",
+      "release_date": "2024-07-23",
+      "open_weight": true,
+      "parameters": "8B"
+  },
+  {
+      "model_name": "aya-expanse-32b",
+      "backend": "huggingface_local",
+      "requires_api_key": true,
+      "huggingface_id": "CohereForAI/aya-expanse-32b",
+      "premade_chat_template": true,
+      "eos_to_cull": "<\\|END_OF_TURN_TOKEN\\|>",
+      "release_date": "2024-10-23",
+      "open_weight": true,
+      "parameters": "32B"
+  },
+  {
+      "model_name": "gpt-4o-2024-08-06",
+      "model_id": "gpt-4o-2024-08-06",
+      "backend": "openai",
+      "supports_images": true,
+      "support_multiple_images": true,
+      "release_date": "2024-08-06",
+      "open_weight": false,
+      "parameters": "",
+      "estimated_parameters": "200B"
+  },
+  {
+      "model_name": "Qwen2.5-72B-Instruct",
+      "backend": "huggingface_local",
+      "huggingface_id": "Qwen/Qwen2.5-72B-Instruct",
+      "premade_chat_template": true,
+      "eos_to_cull": "<\\|im_end\\|>",
+      "release_date": "2024-07-24",
+      "open_weight": true,
+      "parameters": "72B"
+  },
+  {
+      "model_name": "claude-3-5-sonnet-20241022",
+      "model_id": "claude-3-5-sonnet-20241022",
+      "backend": "anthropic",
+      "supports_images": true,
+      "support_multiple_images": true,
+      "release_date": "2024-10-22",
+      "open_weight": false,
+      "parameters": "",
+      "estimated_parameters": ""
+  }
+]
