@@ -8,33 +8,69 @@
       "parameters": "8B"
   },
   {
-      "model_name": "aya-expanse-32b",
+      "model_name": "llama-3.1-8b-turbo-together",
+      "model_id": "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo-128K",
+      "backend": "openai_compatible",
+      "release_date": "2024-07-23",
+      "open_weight": true,
+      "parameters": "8B"
+  },
+  {
+      "model_name": "ruadapt-llama3-8b",
+      "backend": "huggingface_local",
+      "huggingface_id": "RefalMachine/ruadapt_llama3_8b_instruct_extended_lep_ft",
+      "premade_chat_template": true,
+      "eos_to_cull": "<\\|eot_id\\|>",
+      "release_date": "2024-08-22",
+      "open_weight": true,
+      "parameters": "8B"
+  },
+  {
+      "model_name": "saiga-llama3-8b",
+      "backend": "huggingface_local",
+      "huggingface_id": "IlyaGusev/saiga_llama3_8b",
+      "premade_chat_template": true,
+      "eos_to_cull": "<\\|eot_id\\|>",
+      "release_date": "2024-07-02",
+      "open_weight": true,
+      "parameters": "8B"
+  },
+  {
+      "model_name": "Vikhr-Nemo-12B",
+      "backend": "huggingface_local",
+      "huggingface_id": "Vikhrmodels/Vikhr-Nemo-12B-Instruct-R-21-09-24",
+      "premade_chat_template": true,
+      "eos_to_cull": "</s>",
+      "release_date": "2024-09-21",
+      "open_weight": true,
+      "parameters": "12B"
+  },
+  {
+      "model_name": "aya-expanse-8b",
       "backend": "huggingface_local",
       "requires_api_key": true,
-      "huggingface_id": "CohereForAI/aya-expanse-32b",
+      "huggingface_id": "CohereForAI/aya-expanse-8b",
       "premade_chat_template": true,
       "eos_to_cull": "<\\|END_OF_TURN_TOKEN\\|>",
       "release_date": "2024-10-23",
       "open_weight": true,
-      "parameters": "32B"
+      "parameters": "8B"
   },
   {
-      "model_name": "gpt-4o-2024-08-06",
-      "model_id": "gpt-4o-2024-08-06",
+      "model_name": "gpt-4o-2024-11-20",
+      "model_id": "gpt-4o-2024-11-20",
       "backend": "openai",
       "supports_images": true,
       "support_multiple_images": true,
-      "release_date": "2024-08-06",
+      "release_date": "2024-11-20",
       "open_weight": false,
       "parameters": "",
       "estimated_parameters": "200B"
   },
   {
       "model_name": "Qwen2.5-72B-Instruct",
-      "backend": "huggingface_local",
-      "huggingface_id": "Qwen/Qwen2.5-72B-Instruct",
-      "premade_chat_template": true,
-      "eos_to_cull": "<\\|im_end\\|>",
+      "model_id": "Qwen/Qwen2.5-72B-Instruct-Turbo",
+      "backend": "openai_compatible",
       "release_date": "2024-07-24",
       "open_weight": true,
       "parameters": "72B"
