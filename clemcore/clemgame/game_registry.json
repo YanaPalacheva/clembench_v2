@@ -136,7 +136,7 @@
     "main_game": "wordle",
     "players": "one",
     "image": "none",
-    "languages": ["en"],
+    "languages": ["en", "ru"],
     "benchmark": ["2.0"]
   },
   {
@@ -147,7 +147,7 @@
     "instances": "instances_withclue",
     "players": "two",
     "image": "none",
-    "languages": ["en"],
+    "languages": ["en", "ru"],
     "benchmark": ["2.0"]
   },
   {
@@ -158,7 +158,7 @@
     "instances": "instances_withcritic",
     "players": "two",
     "image": "none",
-    "languages": ["en"],
+    "languages": ["en", "ru"],
     "benchmark": ["2.0"]
   },
   {
