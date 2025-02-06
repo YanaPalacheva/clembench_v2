@@ -53,11 +53,11 @@ def build_dispersion_table(catcolumns, df):
     return df
 
 
-def make_stats_table(df):
+def make_stats_table(df, lang: str):
     """Create table with dispersion statistics over all episodes."""
     catcolumns = ['game', 'model', 'metric']
     df_stats = build_dispersion_table(catcolumns, df)
-    options = ['', 'episode', 'tables', 'bench-stats']
+    options = [lang, 'episode', 'tables', 'bench-stats']
     save_multiple_formats(options, df_stats)
     return df
 
@@ -70,7 +70,7 @@ def save_detailed_table(df):
     save_multiple_formats(options, df_stats)
 
 
-def save_paper_table(df):
+def save_paper_table(df, lang: str):
     """Create table with % played and main score."""
     df_aux = df[df['metric'].isin(utils.MAIN_METRICS)]
     categories = ['game', 'model', 'metric']
@@ -111,12 +111,12 @@ def save_paper_table(df):
         inplace=True
         )
     df_paper = df_paper[utils.COLUMN_ORDER]
-    options = ['', 'episode', 'tables', 'bench-paper-table']
+    options = [lang, 'episode', 'tables', 'bench-paper-table']
     save_multiple_formats(options, df_paper)
     return df_paper
 
 
-def save_clem_score_table(df_paper: pd.DataFrame) -> None:
+def save_clem_score_table(df_paper: pd.DataFrame, lang: str) -> None:
     """Create a table with the clem score for each model."""
     df_aux = (df_paper['all'].to_frame()
                              .reset_index()
@@ -128,7 +128,7 @@ def save_clem_score_table(df_paper: pd.DataFrame) -> None:
     df_aux = df_aux['clemscore'].to_frame().reset_index()
     df_aux = df_aux.sort_values('model',
                                 key=lambda column: column.map(lambda e: utils.ROW_ORDER.index(e)))
-    options = ['', 'episode', 'tables', 'clem-score-table']
+    options = [lang, 'episode', 'tables', 'clem-score-table']
     save_multiple_formats(options, df_aux)
     return df_aux
 
@@ -136,14 +136,14 @@ def save_clem_score_table(df_paper: pd.DataFrame) -> None:
 def make_overview_by_game(df: pd.DataFrame) -> None:
     """Create one table by game with all metrics by experiment and model."""
     for game, game_df in df.groupby('game'):
-        results_df = (game_df.groupby(['model', 'experiment', 'metric'])
+        results_df = (game_df.groupby(['model', 'lang', 'experiment', 'metric'])
                              .mean(numeric_only=True)
                              .reset_index()
-                             .pivot(index=['model', 'experiment'],
+                             .pivot(index=['model', 'lang', 'experiment'],
                                     columns=['metric']))
         results_df.columns = results_df.columns.droplevel()
         results_df.columns.name = None
-        results_df.index.names = [None, None]
+        results_df.index.names = [None, None, None]
 
         results_df['Aborted'] *= 100
         results_df['Played'] *= 100
@@ -159,12 +159,12 @@ def make_overview_by_game(df: pd.DataFrame) -> None:
         # as long it gets logged (even if only a nan) for all games
         # that actually got played; we only care for the count
         aux_counts = (game_df[game_df.metric == 'Played']
-                      .groupby(['model', 'experiment', 'metric'])
+                      .groupby(['model', 'lang', 'experiment', 'metric'])
                       .count()
                       .rename(columns={'episode': 'n'})
                       .reset_index()
                       .drop(['metric', 'game', 'value'], axis=1)
-                      .set_index(['model', 'experiment']))
+                      .set_index(['model', 'lang', 'experiment']))
         
         assert all(aux_counts.index == results_df.index)
         results_df = pd.concat([aux_counts, results_df], axis=1)

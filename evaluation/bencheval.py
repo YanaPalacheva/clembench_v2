@@ -21,7 +21,7 @@ class PlayedScoreError(Exception):
     
     This metric is computed locally, as the complement of 
     clemmetrics.METRIC_ABORTED. Games should not compute it, otherwise there
-    would be duplicates in the dataframe. This is in the documentation.
+    would be duplicates in the dataframenot. l. This is in the documentation.
     NOTE: This could instead be verified silently and only computed
     for games that do not have it.
     """

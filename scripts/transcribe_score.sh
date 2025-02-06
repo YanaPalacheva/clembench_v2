@@ -1,3 +1,5 @@
+#!/bin/bash
+# Usage: scripts/transcribe_score.sh
 
 langs=(
 "en"
@@ -8,12 +10,15 @@ langs=(
 games=(
 "taboo"
 "wordle"
+"wordle_withclue"
+"wordle_withcritic"
 )
 
 for lang in "${langs[@]}"; do
     for game in "${games[@]}"; do
 
-        if [[ "$lang" == "ru_translated" && "$game" == "wordle" ]]; then
+        # custom experiment
+        if [[ "$lang" == "ru_translated" && "$game" == wordle* ]]; then
             echo "Skipping game: $game for language: $lang"
             continue
         fi

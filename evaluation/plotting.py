@@ -23,7 +23,7 @@ STACK_COLORS = ['darkolivegreen', 'indianred', 'gray']
 
 # ------------------------ Evaluation of the Benchmark ------------------------
 # Overview plots
-def plot_escore_benchmark(df: pd.DataFrame, ending: str) -> None:
+def plot_escore_benchmark(df: pd.DataFrame, ending: str, lang: str = '') -> None:
     "Create benchmark overview with subplots for all games."
     n_games = len(df.game.unique())
     n_models = len(df.model.unique())
@@ -55,11 +55,11 @@ def plot_escore_benchmark(df: pd.DataFrame, ending: str) -> None:
     plt.suptitle('Benchmark Overview', fontsize=22, y=1)
     fig.tight_layout()
     name = f'overview{ending}'
-    path = utils.create_file_name('', 'episode', 'plots', name, 'pdf')
+    path = utils.create_file_name(lang, 'episode', 'plots', name, 'pdf')
     utils.savefig(path)
 
 
-def plot_stacked_micro_bar(df, df_clem):
+def plot_stacked_micro_bar(df, df_clem, lang: str = ''):
     """Create plot with % aborted, success, lose horizontal bars.
 
     Ordered by clemscore. Micro average (i.e. mean over all episodes per model)
@@ -86,11 +86,11 @@ def plot_stacked_micro_bar(df, df_clem):
     plt.xlim(-1, 101)
     plt.ylabel('')
     name = 'succes-lose-aborted_micro-avr'
-    path = utils.create_file_name('', 'episode', 'plots', name, 'pdf')
+    path = utils.create_file_name(lang, 'episode', 'plots', name, 'pdf')
     utils.savefig(path)
 
 
-def plot_stacked_macro_bar(df, df_clem):
+def plot_stacked_macro_bar(df, df_clem, lang: str = ''):
     """Create plot with % aborted, success, lose horizontal bars.
 
     Ordered by clemscore. Macro average (i.e. mean per game, then mean per
@@ -119,11 +119,11 @@ def plot_stacked_macro_bar(df, df_clem):
     plt.xlim(-1, 101)
     plt.ylabel('')
     name = 'succes-lose-aborted_macro-avr'
-    path = utils.create_file_name('', 'episode', 'plots', name, 'pdf')
+    path = utils.create_file_name(lang, 'episode', 'plots', name, 'pdf')
     utils.savefig(path)
 
 
-def plot_paper_scatter(df_paper: pd.DataFrame) -> None:
+def plot_paper_scatter(df_paper: pd.DataFrame, lang: str = '') -> None:
     """Create scatter plot with % played vs. quality score."""
     dots = (df_paper['all'].to_frame()
                            .reset_index()
@@ -160,18 +160,18 @@ def plot_paper_scatter(df_paper: pd.DataFrame) -> None:
     plt.title('clembench Overview')
 
     name = 'played-quality-paper'
-    path = utils.create_file_name('', 'episode', 'plots', name, 'pdf')
+    path = utils.create_file_name(lang, 'episode', 'plots', name, 'pdf')
     utils.savefig(path)
 
 
-def plot_clem_score(df_clem):
+def plot_clem_score(df_clem, lang: str = ''):
     """Create barplot with the clem score for each mode."""
     fig = plt.figure(figsize=(7, 5))
     sns.barplot(df_clem, x='model', y='clemscore', color='slategray')
     plt.ylim(-5, 105)
     plt.grid(alpha=0.5)
     name = 'clemscore'
-    path = utils.create_file_name('', 'episode', 'plots', name, 'pdf')
+    path = utils.create_file_name(lang, 'episode', 'plots', name, 'pdf')
     utils.savefig(path)
 
 
@@ -240,7 +240,7 @@ def plot_polygons(df):
     utils.savefig(path)
 
 
-def plot_lines(df):
+def plot_lines(df, lang: str = ''):
     """Plot lineplot comparing models across experiments."""
     aux_df = (df[df.metric == clemmetrics.BENCH_SCORE]
               .groupby(['game', 'model', 'experiment'])
@@ -260,7 +260,7 @@ def plot_lines(df):
     sns.move_legend(g, loc="upper center", ncols=len(aux_df.model.unique()),
                     bbox_to_anchor=(0.5, 1.03))
     plt.tight_layout()
-    path = utils.create_file_name('', 'episode', 'plots', 'lines', 'pdf')
+    path = utils.create_file_name(lang, 'episode', 'plots', 'lines', 'pdf')
     utils.savefig(path)
 
 

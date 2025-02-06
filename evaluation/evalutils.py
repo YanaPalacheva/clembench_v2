@@ -18,6 +18,8 @@ RESULTS_DIR = './results'
 SEP = '---'
 FLOAT_FORMAT = "%.2f"
 
+
+
 # metrics that go in the main results table
 MAIN_METRICS = [clemmetrics.METRIC_PLAYED, clemmetrics.BENCH_SCORE]
 
@@ -49,43 +51,91 @@ GAMEPLAY_METRICS = [
     ]
 
 # order of the rows in the main table, to be used as a key in pandas
-ROW_ORDER = ['lm--lm', 'ko--ko', 'flc--flc', 'ost--ost', 'vcn--vcn',
-             'cl--cl',  '3--3', '3.5--3.5', '3.5--4', '4--3.5', '4--4',
-             clemmetrics.METRIC_PLAYED, clemmetrics.BENCH_SCORE]
+# ROW_ORDER = ['lm--lm', 'ko--ko', 'flc--flc', 'ost--ost', 'vcn--vcn',
+#              'cl--cl',  '3--3', '3.5--3.5', '3.5--4', '4--3.5', '4--4',
+#              clemmetrics.METRIC_PLAYED, clemmetrics.BENCH_SCORE]
+
+ROW_ORDER = [ # todo make setter
+    "llama",
+    "ruadapt",
+    "saiga",
+    "vikhr",
+    "aya",
+    "tower",
+    "gpt",
+    "claude",
+    "qwen",
+    clemmetrics.METRIC_PLAYED,
+    clemmetrics.BENCH_SCORE
+]
+
+# ROW_ORDER = [ # todo make setter
+#     "llama--llama",
+#     "ruadapt--ruadapt",
+#     "saiga--saiga",
+#     "vikhr--vikhr",
+#     "aya--aya",
+#     "tower--tower",
+#     "gpt--gpt",
+#     "claude--claude",
+#     "qwen--qwen",
+#     clemmetrics.METRIC_PLAYED,
+#     clemmetrics.BENCH_SCORE
+# ]
 
 # order of the columns in the main table
 COLUMN_ORDER = ['all', 'taboo', 'wordle', 'wordle_withclue',
-                'wordle_withcritic', 'imagegame', 'referencegame',
-                'privateshared']
+                'wordle_withcritic']
+                # 'imagegame', 'referencegame',
+                # 'privateshared']
 
 # shorter names for the models
 short_names = {
     "t0.0": "",
-    "claude-v1.3-": "cl",
-    "gpt-3.5-turbo-": "3.5",
-    "gpt-4-": "4",
-    "text-davinci-003-": "3",
-    "luminous-supreme-": "lm",
-    "koala-13b-": "ko",
-    "falcon-40b-": "flc",
-    "oasst-12b-": "ost",
-    "vicuna-13b-": "vcn"
+    "ruadapt-llama3-8b-": "ruadapt",
+    "saiga-llama3-8b-": "saiga",
+    "Vikhr-Nemo-12B-": "vikhr",
+    "aya-expanse-8b-": "aya",
+    "TowerInstruct-13B-v0.1-": "tower",
+    "gpt-4o-2024-11-20-openrouter-": "gpt",
+    "claude-3-5-sonnet-2024-10-22-openrouter-": "claude",
+    "qwen-2.5-72B-Instruct-openrouter-": "qwen",
+    "llama-3.1-8b-openrouter-": "llama"
+    # "claude-v1.3-": "cl",
+    # "gpt-3.5-turbo-": "3.5",
+    # "gpt-4-": "4",
+    # "text-davinci-003-": "3",
+    # "luminous-supreme-": "lm",
+    # "koala-13b-": "ko",
+    # "falcon-40b-": "flc",
+    # "oasst-12b-": "ost",
+    # "vicuna-13b-": "vcn"
 }
 
 # short names for the scatterplot
 plot_annotations = {
-    '4--4': '4',
-    '3--3': '3',
-    'lm--lm': 'lm',
-    'cl--cl': 'cl',
-    '3.5--3.5': '3.5',
-    '4--3.5': '4/3.5',
-    '3.5--4': '3.5/4',
-    'ko--ko': 'ko',
-    'flc--flc': 'flc',
-    'ost--ost': 'ost',
-    'vcn--vcn': 'vcn'
-    }
+    # '4--4': '4',
+    # '3--3': '3',
+    # 'lm--lm': 'lm',
+    # 'cl--cl': 'cl',
+    # '3.5--3.5': '3.5',
+    # '4--3.5': '4/3.5',
+    # '3.5--4': '3.5/4',
+    # 'ko--ko': 'ko',
+    # 'flc--flc': 'flc',
+    # 'ost--ost': 'ost',
+    # 'vcn--vcn': 'vcn'
+    # }
+    "ruadapt": "ruadapt",
+    "saiga": "saiga",
+    "vikhr": "vikhr",
+    "aya": "aya",
+    "tower": "tower",
+    "gpt": "gpt",
+    "claude": "claude",
+    "qwen": "qwen",
+    "llama": "llama"
+}
 
 metric_lims = {
     clemmetrics.BENCH_SCORE: (-2, 102),
@@ -188,14 +238,23 @@ def create_eval_subdirs(path: str) -> None:
     Path(f'{path_epi}/tables').mkdir(parents=True, exist_ok=True)
 
 
-def create_eval_tree(levels: list) -> None:
+def create_eval_tree(levels: list, lang: str = '') -> None:
     """Create eval directory with same structure as the results."""
     bencheval_path = Path(f'./{EVAL_DIR}/')
-    create_eval_subdirs(bencheval_path)
+    if lang:
+        lang_path = bencheval_path / lang
+        create_eval_subdirs(lang_path)
+    else:
+        create_eval_subdirs(bencheval_path)
     for game, model, experiment, episode in levels:
         game_path = bencheval_path / game
         create_eval_subdirs(game_path)
-        model_path = game_path / model
+        if lang:
+            lang_path = game_path / lang
+            create_eval_subdirs(lang_path)
+        else:
+            lang_path = game_path
+        model_path = lang_path / model
         create_eval_subdirs(model_path)
         exp_path = model_path / experiment
         create_eval_subdirs(exp_path)
@@ -345,7 +404,7 @@ def create_file_name(subfolders: str, level: str, kind: str,
     """Create file name according to the results structure."""
     if subfolders != '':
         return (f"{EVAL_DIR}/{subfolders.replace(' | ', '/')}/{EVAL_DIR}/"
-                f"{level}-level/{kind}/{subfolders.replace(' | ', SEP)}"
+                f"{level}-level/{kind}/" #{subfolders.replace(' | ', SEP)}"
                 f"{ending}.{extension}")
     return f"{EVAL_DIR}/{EVAL_DIR}/{level}-level/{kind}/{ending}.{extension}"
 
