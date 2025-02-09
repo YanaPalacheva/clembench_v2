@@ -56,38 +56,79 @@ HTML_TAIL = """
     </div>
 
     <!-- Iframe zum Anzeigen der Transcripts -->
-    <iframe id="transcript-frame" name="transcript-frame" width="90%" height="600px"></iframe>
+    <iframe id="transcript-frame" name="transcript-frame" width="90%" height: 1000px; onload="resizeIframe(this)"></iframe>
 
     <script>
+        function resizeIframe(iframe) {
+            try {
+                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+            } catch (e) {
+                console.error("Could not access iframe content due to cross-origin restrictions.");
+            }
+        }
+    </script>
+    
+    <script>
         const transcript_links = document.getElementById("transcript-links").getElementsByTagName("a");
+        let currentIndex = 0;  // Track the current link index
 
+        // Initially show the first link
         transcript_links[0].style.display = "block";
 
+        // Add click event listeners to each link
         for (const link of transcript_links) {
             link.addEventListener("click", function () {
-                this.style.display = "none";
-                let prev = this.previousElementSibling;
-                let next = this.nextElementSibling;
-                if (prev) {
-                    prev.style.display = "block";
-                    prev.innerHTML = "Previous episode";
-                    let preprev = prev.previousElementSibling;
-                    if (preprev) {
-                        preprev.style.display = "none";
-                        preprev.innerHTML = "Next episode";
-                    }
-                }
-                if (next) {
-                    next.style.display = "block";
-                    next.innerHTML = "Next episode";
-                    let afternext = next.nextElementSibling;
-                    if (afternext) {
-                        afternext.style.display = "none";
-                        afternext.innerHTML = "Next episode";
-                    }
-                }
+                navigateToNextOrPrevLink(link);
             });
         }
+
+        // Function to handle manual link navigation
+        function navigateToNextOrPrevLink(currentLink) {
+            currentLink.style.display = "none";
+            let prev = currentLink.previousElementSibling;
+            let next = currentLink.nextElementSibling;
+
+            if (prev) {
+                prev.style.display = "block";
+                prev.innerHTML = "Previous episode";
+                let preprev = prev.previousElementSibling;
+                if (preprev) {
+                    preprev.style.display = "none";
+                    preprev.innerHTML = "Next episode";
+                }
+            }
+
+            if (next) {
+                next.style.display = "block";
+                next.innerHTML = "Next episode";
+                let afternext = next.nextElementSibling;
+                if (afternext) {
+                    afternext.style.display = "none";
+                    afternext.innerHTML = "Next episode";
+                }
+            }
+        }
+
+        // Add keyboard event listener for arrow keys
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "ArrowRight") {
+                // Navigate to the next episode
+                if (currentIndex < transcript_links.length - 1) {
+                    transcript_links[currentIndex].style.display = "none";
+                    currentIndex++;
+                    transcript_links[currentIndex].style.display = "block";
+                    transcript_links[currentIndex].click();  // Trigger the link
+                }
+            } else if (event.key === "ArrowLeft") {
+                // Navigate to the previous episode
+                if (currentIndex > 0) {
+                    transcript_links[currentIndex].style.display = "none";
+                    currentIndex--;
+                    transcript_links[currentIndex].style.display = "block";
+                    transcript_links[currentIndex].click();  // Trigger the link
+                }
+            }
+        });
     </script>
 
 </body>
@@ -177,12 +218,14 @@ def save_transcript_navigator(transcript_paths, results_path, filename):
 if __name__ == "__main__":
     # Example run (change arguments if needed):
     results_path = "results"
-    games = ["referencegame"]  # "imagegame" "referencegame"
-    languages = [] # ["en", "es", "ru", "te", "tk", "tr"]
-    file_out = "transcript_navigator_referencegame.html"  # is placed in the results_path
+    games = ['taboo' 'wordle', 'wordle_withclue', 'wordle_withcritic']  # "imagegame" "referencegame"
+    languages = ['en', 'ru']#, 'ru_translated'] # ["en", "es", "ru", "te", "tk", "tr"]
+    file_out = "transcript_navigator_test"  # is placed in the results_path
 
-    # Extract paths to transcript.html's
-    transcript_paths = get_transcript_htmls(results_path, games, languages=languages)
+    for lang in languages:
+        for game in games:
+            # Extract paths to transcript.html's
+            transcript_paths = get_transcript_htmls(results_path, [game], languages=[lang])
 
-    # Create output html
-    save_transcript_navigator(transcript_paths, results_path, file_out)
+            # Create output html
+            save_transcript_navigator(transcript_paths, results_path, f'{file_out}_{game}_{lang}.html')
